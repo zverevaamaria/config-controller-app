@@ -21,8 +21,9 @@
 
 ## swagger спецификация ##
 по ссылке: по ссылке: ![swagger](https://github.com/zverevaamaria/config-controller-app/blob/main/config-controller/config-controller.yaml)
+
 ![img.png](img.png)
-![img.png](img.png)
+
 ## Тестовый пример использования ##
 ### Получение всех конфигов ###
 ````
