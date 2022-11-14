@@ -1,0 +1,274 @@
+openapi: 3.0.0
+info:
+  title: config-controller-app API
+  description: API allow to do CRUD operations on config
+  version: 1.0.0
+servers:
+  - url:  http://localhost:8080
+    description: Production service
+paths:
+  /config:
+    get:
+      summary: Returns a list of configs or returns a config by id
+      description: Returns a config by service
+      parameters:
+        - in: query
+          name: service
+          schema:
+            type: string
+          required: false
+          description: Returns a config by service-name
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Config'
+        '404':
+          description: config is not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: "Not found"
+        '500':
+          description: internal service error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: "Internal error"
+    post:
+      summary: Creates a config
+      description: Creates a new config
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatingOrEditingConfig'
+      responses:
+        '201':
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Config'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: "JSON parse error - Expecting property name enclosed in double quotes: line 3 column 5 (char 36)"
+        '500':
+          description: internal service error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: "Internal error"
+  /config/{id}:
+    get:
+      summary: Returns a configs by id
+      description: Returns a config by id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Config'
+        '404':
+          description: config is not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: "Not found"
+        '500':
+          description: internal service error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: "Internal error"
+    put:
+      summary: edit a config by id
+      description: Rewrites a config
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatingOrEditingConfig'
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Config'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "failed"
+                  detail:
+                    type: object
+                    properties:
+                      service:
+                        type: array
+                        items:
+                          type: string
+                          example: "config with this сервис конфига already exists."
+
+        '404':
+          description: config is not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: "Not found"
+        '500':
+          description: internal service error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: "Internal error"
+    delete:
+      summary: delete a config by id
+      description: deletes a config by id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: no content
+        '404':
+          description: config is not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: "Not found"
+        '409':
+          description: conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: "config is used by service:25 you can delete this config only if service is null"
+        '500':
+          description: internal service error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: "Internal error"
+
+
+components:
+  schemas:
+    Config:
+      type: object
+      properties:
+        id:
+          type: number
+          description: unique id
+          example: 1
+        service:
+          type: string
+          description: service, that use config. Unique parameter. nullable
+          example: "s3"
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConfigData'
+          description: configuration file
+        version:
+          type: number
+          format: float
+          description: config`s actual version
+          example: 1.2
+    CreatingOrEditingConfig:
+      type: object
+      properties:
+        service:
+          type: string
+          description: service, that use config. Unique parameter, nullable
+          example: "s3"
+          required: true
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConfigData'
+          description: configuration file
+          required: true
+        version:
+          type: number
+          format: float
+          description: config`s actual version
+          example: 1.2
+          required: false
+    ConfigData:
+      type: object
+      example:
+        {"key1": "value"}

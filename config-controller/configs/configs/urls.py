@@ -19,7 +19,7 @@ from rest_framework.routers import SimpleRouter
 
 from controller.views import ConfigViewSet
 
-router = SimpleRouter()
+router = SimpleRouter(trailing_slash=False)
 
 router.register(r'config', ConfigViewSet)
 
