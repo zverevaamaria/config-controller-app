@@ -3,4 +3,4 @@ djangorestframework==3.14.0
 confine-controller==1.0.2
 django-filter==22.1
 psycopg2==2.9.1
-django_heroku=0.3.1
+django_heroku==0.3.1
