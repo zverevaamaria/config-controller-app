@@ -7,5 +7,5 @@ class Config(models.Model):
     data = models.JSONField('содержимое конфига', blank=False)
     version = models.DecimalField('версия конфига', blank=True, decimal_places=2, max_digits=5, default=1)
     is_deleted = models.BooleanField(default=False)
-    created_at = models.DateTimeField('дата создания конфига',  default=timezone.now)
-    updated_at = models.DateTimeField('дата обновления конфига', blank=True)
+    created_at = models.DateTimeField('дата создания конфига',  default=timezone.now, blank=True)
+    updated_at = models.DateTimeField('дата обновления конфига', blank=True, default=timezone.now)
