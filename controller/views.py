@@ -1,11 +1,15 @@
+import io
+import json
 from decimal import Decimal
 
 from django_filters.rest_framework import DjangoFilterBackend
 from psycopg2 import IntegrityError
 from rest_framework import status
+from rest_framework.parsers import JSONParser
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from django.utils import timezone
+from rest_framework.renderers import JSONRenderer
 
 
 from controller.models import Config
@@ -46,7 +50,27 @@ class ConfigViewSet(ModelViewSet):
             content = {"message": "failed", "details": serializer.errors}
             return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
+    def create(self, request, *args, **kwargs):
+        datas = []
+        result_data = {}
+        result_data_to_save = {}
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            ##json_data = JSONRenderer().render(serializer.validated_data)
+            ##result_data = json.loads(json_data)
+            datas = serializer.validated_data['data']
+            for data_config in datas:
+                result_data_to_save.update(data_config)
 
+            serializer.validated_data['data'] = result_data_to_save
+            if serializer.is_valid():
+                serializer.save()
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            content = {"message": "failed", "details": serializer.errors}
+            return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
 
