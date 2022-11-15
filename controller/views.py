@@ -60,7 +60,11 @@ class ConfigViewSet(ModelViewSet):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            datas = serializer.validated_data['data']
+            try:
+                datas = serializer.validated_data['data']
+            except KeyError:
+                content = {"details": "data is mandatory parameter"}
+                return Response(content, status=status.HTTP_400_BAD_REQUEST)
             serializer.validated_data['data'] = transrom_list_to_obj(datas)
             if serializer.is_valid():
                 serializer.save()
