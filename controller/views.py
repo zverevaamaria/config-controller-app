@@ -50,7 +50,8 @@ class ConfigViewSet(ModelViewSet):
             serializer.validated_data['data'] = transrom_list_to_obj(datas)
             if serializer.is_valid():
                 serializer.save()
-            serializer.save()
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             content = {"message": "failed", "details": serializer.errors}
