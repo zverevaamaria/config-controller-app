@@ -46,8 +46,15 @@ class ConfigViewSet(ModelViewSet):
         if serializer.is_valid():
             config.version += Decimal('0.01')
             config.updated_at = timezone.now()
-            datas = serializer.validated_data['data']
-            serializer.validated_data['data'] = transrom_list_to_obj(datas)
+            try:
+                datas = serializer.validated_data['data']
+                serializer.validated_data['data'] = transrom_list_to_obj(datas)
+            except KeyError:
+                if serializer.is_valid():
+                    serializer.save()
+                else:
+                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                return Response(serializer.data, status=status.HTTP_200_OK)
             if serializer.is_valid():
                 serializer.save()
             else:
