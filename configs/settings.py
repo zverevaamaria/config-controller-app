@@ -9,11 +9,10 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-
+import os.path
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-import os
 import django_heroku
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -28,9 +27,7 @@ SECRET_KEY = 'django-insecure-q75&c=%fw)g5ke%j0xl7d=f3z3d2&*f4l+ny(+#tb(!!vym_#m
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [
-    'config-controller.herokuapp.com',
-]
+ALLOWED_HOSTS = ['config-controller.herokuapp.com']
 
 
 # Application definition
@@ -44,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'controller',
     'django_filters',
+    'rest_framework',
 ]
 
 REMOVE_SLASH = True
@@ -94,6 +92,7 @@ DATABASES = {
     }
 }
 
+
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
@@ -127,11 +126,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-#STATIC_URL = 'static/'
-
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATIC_URL = "/static/"
+STATIC_ROOT= os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = '/static/'
 django_heroku.settings(locals())
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
