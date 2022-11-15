@@ -24,7 +24,7 @@
 | updated_at  | datetime         |
 
 ## swagger спецификация ##
-по ссылке: по ссылке: ![swagger](https://github.com/zverevaamaria/config-controller-app/blob/main/config-controller/config-controller.yaml)
+по ссылке: по ссылке: ![swagger](https://github.com/zverevaamaria/config-controller-app/blob/main/config-controller.yaml)
 
 ![img.png](img.png)
 
