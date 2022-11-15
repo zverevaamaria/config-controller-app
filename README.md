@@ -8,6 +8,10 @@
 сервис реализован на python с применением фреймворка Django + REST framework.
 В качестве базы данных выбрана Postgresql
 
+## Deploy ##
+приложение доступно по адресу: https://config-controller.herokuapp.com/config
+
+
 ## Схема данных ##
 
 | Название поля       | Тип данных               | 
