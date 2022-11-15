@@ -13,6 +13,9 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+import os
+import django_heroku
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -25,7 +28,9 @@ SECRET_KEY = 'django-insecure-q75&c=%fw)g5ke%j0xl7d=f3z3d2&*f4l+ny(+#tb(!!vym_#m
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'config-controller.herokuapp.com',
+]
 
 
 # Application definition
@@ -81,17 +86,14 @@ WSGI_APPLICATION = 'configs.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'dddq89vmf04kp7',
-        'USER': 'gvsjwgxxifqnfb',
-        'PASSWORD': '518a5c98962397097396e1e1f2c10eb7907261976c4f7e273d82a68b7b3fc186',
-        'HOST': 'ec2-18-214-35-70.compute-1.amazonaws.com',
+        'NAME': 'dccs79vvh4u6v',
+        'USER': 'ghgniawztgbsqv',
+        'PASSWORD': '73c9c6c47dd675b7db031b384dd482ef7330f875a492939420c17f9fd3bf5fc0',
+        'HOST': 'ec2-34-192-210-139.compute-1.amazonaws.com',
         'PORT': '5432',
     }
 }
-import dj_database_url
 
-db_from_env = dj_database_url.config(conn_max_age = 600)
-DATABASES['default'].update(db_from_env)
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
@@ -125,8 +127,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
+#STATIC_URL = 'static/'
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = "/static/"
+django_heroku.settings(locals())
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
