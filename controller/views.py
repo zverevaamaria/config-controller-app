@@ -16,11 +16,13 @@ from controller.models import Config
 from controller.serializers import ConfigSerializer
 
 
+
 class ConfigViewSet(ModelViewSet):
     queryset = Config.objects.filter(is_deleted=False)
     serializer_class = ConfigSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['service']
+
 
 
     def destroy(self, request, *args, **kwargs):
@@ -44,6 +46,10 @@ class ConfigViewSet(ModelViewSet):
         if serializer.is_valid():
             config.version += Decimal('0.01')
             config.updated_at = timezone.now()
+            datas = serializer.validated_data['data']
+            serializer.validated_data['data'] = transrom_list_to_obj(datas)
+            if serializer.is_valid():
+                serializer.save()
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
@@ -51,18 +57,10 @@ class ConfigViewSet(ModelViewSet):
             return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
     def create(self, request, *args, **kwargs):
-        datas = []
-        result_data = {}
-        result_data_to_save = {}
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            ##json_data = JSONRenderer().render(serializer.validated_data)
-            ##result_data = json.loads(json_data)
             datas = serializer.validated_data['data']
-            for data_config in datas:
-                result_data_to_save.update(data_config)
-
-            serializer.validated_data['data'] = result_data_to_save
+            serializer.validated_data['data'] = transrom_list_to_obj(datas)
             if serializer.is_valid():
                 serializer.save()
             else:
@@ -72,5 +70,15 @@ class ConfigViewSet(ModelViewSet):
         else:
             content = {"message": "failed", "details": serializer.errors}
             return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
+def transrom_list_to_obj(data): #transform 'data' in json to json obj
+    if isinstance(data, list):
+        result_data_to_save = {}
+        for data_config in data:
+            result_data_to_save.update(data_config)
+        return result_data_to_save
+    elif isinstance(data, dict):
+        return data
+
 
 
