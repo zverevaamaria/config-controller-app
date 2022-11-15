@@ -43,36 +43,30 @@ GET http://127.0.0.1:8000/config
 ````
 [
     {
-        "id": 21,
-        "service": "vmware",
-        "data": [
-            {
-                "key1": "value1"
-            },
-            {
-                "key2": "value2"
-            }
-        ],
+        "id": 12,
+        "service": "k8s",
+        "data": {
+            "key1": "value1",
+            "key2": "value2"
+        },
         "version": "1.00"
     },
     {
-        "id": 22,
-        "service": "s3",
-        "data": [
-            {
-                "key1": "value1"
-            },
-            {
-                "key2": "value2"
-            }
-        ],
+        "id": 13,
+        "service": "postgresql",
+        "data": {
+            "host": "value2",
+            "pass": "value2",
+            "port": "value2",
+            "user": "value1"
+        },
         "version": "1.00"
     }
 ]
 ````
 ### Получение конфига по сервису ###
 ````
-GET http://127.0.0.1:8000/config?service=s3
+GET http://127.0.0.1:8000/config?service=postgresql
 ````
 Тело запроса:
 ````
@@ -84,23 +78,21 @@ GET http://127.0.0.1:8000/config?service=s3
 ````
 [
     {
-        "id": 22,
-        "service": "s3",
-        "data": [
-            {
-                "key1": "value1"
-            },
-            {
-                "key2": "value2"
-            }
-        ],
+        "id": 13,
+        "service": "postgresql",
+        "data": {
+            "host": "value2",
+            "pass": "value2",
+            "port": "value2",
+            "user": "value1"
+        },
         "version": "1.00"
     }
 ]
 ````
-### Получение конфига по идентификатору###
+### Получение конфига по идентификатору ###
 ````
-GET http://127.0.0.1:8000/config/21
+GET http://127.0.0.1:8000/config/12
 ````
 Тело запроса:
 ````
@@ -111,16 +103,12 @@ GET http://127.0.0.1:8000/config/21
 Тело ответа:
 ````
 {
-    "id": 21,
-    "service": "vmware",
-    "data": [
-        {
-            "key1": "value1"
-        },
-        {
-            "key2": "value2"
-        }
-    ],
+    "id": 12,
+    "service": "k8s",
+    "data": {
+        "key1": "value1",
+        "key2": "value2"
+    },
     "version": "1.00"
 }
 ````
@@ -131,8 +119,11 @@ POST http://127.0.0.1:8000/config
 Тело запроса:
 ````
 {
-        "service": "k8s",
-        "data": [{"key1":"value1"}]
+    "service": "docker",
+    "data": [
+        {"key1":"value1"}, 
+        {"key2": "value2"}
+    ]
 }
 ````
 Код ответа: 201
@@ -140,26 +131,28 @@ POST http://127.0.0.1:8000/config
 Тело ответа:
 ````
 {
-    "id": 20,
-    "service": "k8s",
-    "data": [
-        {
-            "key1": "value1"
-        }
-    ],
+    "id": 14,
+    "service": "docker",
+    "data": {
+        "key1": "value1",
+        "key2": "value2"
+    },
     "version": "1.00"
 }
 ````
 
 ### Редактирование конфига ###
 ````
-PUT http://127.0.0.1:8000/config/20
+PUT http://127.0.0.1:8000/config/14
 ````
 Тело запроса:
 ````
 {
-        "service": null,
-        "data": [{"key1":"value1"}]
+    "service": "docker-compose",
+    "data": {
+        "key1": "value1",
+        "key2": "value2"
+    }
 }
 ````
 Код ответа: 200
@@ -167,20 +160,19 @@ PUT http://127.0.0.1:8000/config/20
 Тело ответа:
 ````
 {
-    "id": 20,
-    "service": null,
-    "data": [
-        {
-            "key1": "value1"
-        }
-    ],
-    "version": "1.01"
+    "id": 14,
+    "service": "docker-compose",
+    "data": {
+        "key1": "value1",
+        "key2": "value2"
+    },
+    "version": "1.02"
 }
 ````
 
 ### Удаление конфига ###
 ````
-DELETE http://127.0.0.1:8000/config/20
+DELETE http://127.0.0.1:8000/config/14
 ````
 Тело запроса:
 ````
