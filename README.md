@@ -184,5 +184,7 @@ DELETE http://127.0.0.1:8000/config/14
 ````
 -
 ````
+## Логика удаления ##
+![delete_logic.drawio.png](delete_logic.drawio.png)
 
 

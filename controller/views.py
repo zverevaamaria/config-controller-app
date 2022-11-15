@@ -64,6 +64,7 @@ class ConfigViewSet(ModelViewSet):
             content = {"message": "failed", "details": serializer.errors}
             return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
+
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
